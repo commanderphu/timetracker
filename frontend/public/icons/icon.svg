@@ -1,0 +1,16 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Hintergrund des Icons mit abgerundeten Ecken -->
+    <rect width="512" height="512" rx="90" fill="#1f2937"/>
+
+    <!-- Hellerer innerer Kreis als Ziffernblatt -->
+    <circle cx="256" cy="256" r="160" fill="#374151"/>
+
+    <!-- Stundenzeiger (kurz und dick) -->
+    <line x1="256" y1="256" x2="256" y2="160" stroke="#f3f4f6" stroke-width="24" stroke-linecap="round"/>
+
+    <!-- Minutenzeiger (lang und dünn) -->
+    <line x1="256" y1="256" x2="352" y2="256" stroke="#a7f3d0" stroke-width="16" stroke-linecap="round"/>
+
+    <!-- Mittelpunkt -->
+    <circle cx="256" cy="256" r="12" fill="#f3f4f6"/>
+</svg>
