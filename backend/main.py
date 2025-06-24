@@ -49,7 +49,8 @@ class StatusResponse(BaseModel):
 # --- App-Instanz und Middleware ---
 app = FastAPI(title="TimeTracker API")
 
-origins = ["http://localhost:5173", "http://127.0.0.1:5173","https://timetracker-frontend-w5ri.onrender.com/"]
+origins = ["http://localhost:5173", "http://127.0.0.1:5173", # Lokale Entwicklung
+           "https://timetracker-frontend-w5ri.onrender.com/","https://timetracker.einfachnurphu.io/"] # Produktions-Frontend]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
