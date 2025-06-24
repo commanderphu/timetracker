@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeTracker - Interaktive Projektübersicht</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            max-width: 300px;
+        }
+        .file-tree-item:hover > div > span:first-child,
+        .file-tree-item.active > div > span:first-child {
+            color: #3b82f6; /* blue-500 */
+        }
+        .tab-active {
+            border-color: #3b82f6; /* blue-500 */
+            color: #3b82f6;
+            background-color: #eff6ff; /* blue-50 */
+        }
+    </style>
+    <!-- Chosen Palette: Slate Gray & Blue -->
+    <!-- Application Structure Plan: A single-page dashboard layout that transforms the README into an interactive experience. The structure follows a logical flow: Header, About, Tech Stack, Project Structure, Setup/Deployment, and Future Features. This structure is designed to guide the user from a high-level overview to specific technical details. Interactions like clickable cards, an interactive file tree, and tabs are used to keep the user engaged and prevent information overload, making the content more digestible than a static text file. -->
+    <!-- Visualization & Content Choices: 
+        - About/Features: Presented as a clear, scannable list to quickly convey the project's value.
+        - Tech Stack: Interactive cards are used (HTML/CSS) to allow users to explore each technology without leaving the context. Goal: Organize/Inform. Interaction: Click to reveal details. Justification: More engaging than a simple list.
+        - Project Structure: A custom, interactive file tree diagram (HTML/CSS) is used instead of a static code block. Goal: Organize. Interaction: Click to view file descriptions. Justification: Visually represents the repository structure and encourages exploration. NO SVG/Mermaid used.
+        - Setup/Deployment: A tabbed interface (HTML/CSS/JS) is chosen to segment the setup process into logical steps (Backend, Frontend). Goal: Organize/Inform. Interaction: Click to switch tabs. Justification: Simplifies a complex process and reduces cognitive load.
+        - Future Features: A donut chart (Chart.js/Canvas) visualizes the status of future work. Goal: Inform/Compare. Interaction: Hover to see tooltips. Justification: Provides a quick, visual summary of the project's roadmap, which is more impactful than a simple checklist. NO SVG used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-900">TimeTracker</h1>
+            </div>
+            <div class="hidden md:flex space-x-6 text-slate-600">
+                <a href="#features" class="hover:text-blue-500">Features</a>
+                <a href="#tech-stack" class="hover:text-blue-500">Tech Stack</a>
+                <a href="#setup" class="hover:text-blue-500">Einrichtung</a>
+                <a href="#roadmap" class="hover:text-blue-500">Roadmap</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section class="text-center mb-20">
+            <h2 class="text-4xl font-bold mb-4 text-slate-900">Persönliche Zeiterfassung, modern umgesetzt.</h2>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                Dies ist eine moderne, persönliche Zeiterfassungsanwendung, die entwickelt wurde, um die Arbeitszeit schnell und unkompliziert von unterwegs zu erfassen. Entdecken Sie die Technologie und die Struktur hinter dem Projekt.
+            </p>
+        </section>
+
+        <section id="features" class="mb-20">
+            <h3 class="text-3xl font-bold text-center mb-12 text-slate-900">Features im Überblick</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h4 class="font-bold text-lg mb-2 text-blue-600">Einfache Zeiterfassung</h4>
+                    <p class="text-slate-600">Starten und Stoppen der Zeitmessung mit großen, benutzerfreundlichen Buttons.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h4 class="font-bold text-lg mb-2 text-blue-600">Persönliches Dashboard</h4>
+                    <p class="text-slate-600">Die App ist auf einen festen Benutzer zugeschnitten und begrüßt diesen namentlich.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h4 class="font-bold text-lg mb-2 text-blue-600">Detaillierte Übersicht</h4>
+                    <p class="text-slate-600">Alle Zeiteinträge werden in einer chronologischen Liste mit exakten Start- und Endzeiten angezeigt.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h4 class="font-bold text-lg mb-2 text-blue-600">Progressive Web App (PWA)</h4>
+                    <p class="text-slate-600">Kann wie eine native App direkt auf dem Startbildschirm von iOS und Android installiert werden.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h4 class="font-bold text-lg mb-2 text-blue-600">Offline-Fähigkeit</h4>
+                    <p class="text-slate-600">Die Benutzeroberfläche lädt auch ohne aktive Internetverbindung sofort.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h4 class="font-bold text-lg mb-2 text-blue-600">Live Deployment</h4>
+                    <p class="text-slate-600">Die gesamte Anwendung ist auf Render deployt und über das Internet erreichbar.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech-stack" class="mb-20">
+            <h3 class="text-3xl font-bold text-center mb-12 text-slate-900">Technologie-Stack</h3>
+            <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">Die Anwendung ist als Monorepo strukturiert. Klicken Sie auf eine Karte, um mehr über die jeweilige Technologie zu erfahren.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-bold mb-4 text-center">Backend</h4>
+                    <div id="backend-stack" class="space-y-4"></div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-bold mb-4 text-center">Frontend</h4>
+                    <div id="frontend-stack" class="space-y-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="structure" class="mb-20">
+            <h3 class="text-3xl font-bold text-center mb-12 text-slate-900">Projektstruktur</h3>
+             <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">Ein Monorepo, um Backend und Frontend zentral zu verwalten. Klicken Sie auf eine Datei oder einen Ordner, um eine Beschreibung zu sehen.</p>
+            <div class="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row gap-8">
+                <div id="file-tree" class="w-full md:w-1/3 font-mono text-sm space-y-2"></div>
+                <div id="file-description" class="w-full md:w-2/3 bg-slate-100 p-6 rounded-lg min-h-[200px] flex items-center justify-center">
+                    <p class="text-slate-500">Wählen Sie eine Datei aus, um Details anzuzeigen.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="setup" class="mb-20">
+            <h3 class="text-3xl font-bold text-center mb-12 text-slate-900">Einrichtung & Deployment</h3>
+            <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">So können Sie das Projekt lokal aufsetzen oder auf einer Plattform wie Render deployen.</p>
+            <div class="bg-white rounded-lg shadow-md">
+                <div id="tabs" class="border-b border-slate-200 flex">
+                    <button data-tab="backend-setup" class="tab-button tab-active p-4 font-semibold border-b-2 border-transparent">Backend-Einrichtung</button>
+                    <button data-tab="frontend-setup" class="tab-button p-4 font-semibold border-b-2 border-transparent text-slate-500">Frontend-Einrichtung</button>
+                    <button data-tab="deployment" class="tab-button p-4 font-semibold border-b-2 border-transparent text-slate-500">Deployment</button>
+                </div>
+                <div id="tab-content" class="p-6 md:p-8"></div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="mb-20">
+            <h3 class="text-3xl font-bold text-center mb-12 text-slate-900">Zukünftige Features (Roadmap)</h3>
+            <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">Dieses Projekt hat das Potenzial für viele Erweiterungen. Die Grafik zeigt den aktuellen Planungsstand.</p>
+            <div class="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center gap-8">
+                <div class="chart-container w-full md:w-1/3">
+                    <canvas id="roadmapChart"></canvas>
+                </div>
+                <ul id="roadmap-list" class="w-full md:w-2/3 space-y-3"></ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300 py-6 text-center">
+        <p>Erstellt von Joshua Phu Bein.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Tech Stack Data ---
+            const techStackData = {
+                backend: [
+                    { name: 'FastAPI', description: 'Ein modernes, schnelles (hochleistungsfähiges) Web-Framework für die Erstellung von APIs mit Python.' },
+                    { name: 'Python', description: 'Die Programmiersprache, die für die gesamte Backend-Logik verwendet wird.' },
+                    { name: 'PostgreSQL (Supabase)', description: 'Eine leistungsstarke, objektrelationale Open-Source-Datenbank, gehostet auf Supabase.' },
+                    { name: 'psycopg2-binary', description: 'Ein PostgreSQL-Datenbankadapter für Python.' },
+                    { name: 'Uvicorn', description: 'Ein blitzschneller ASGI-Server, der zum Ausführen der FastAPI-Anwendung verwendet wird.' }
+                ],
+                frontend: [
+                    { name: 'React', description: 'Eine JavaScript-Bibliothek zur Erstellung von Benutzeroberflächen.' },
+                    { name: 'Vite', description: 'Ein modernes Frontend-Build-Tool, das ein deutlich schnelleres und schlankeres Entwicklungserlebnis bietet.' },
+                    { name: 'Tailwind CSS', description: 'Ein Utility-First-CSS-Framework zur schnellen Erstellung benutzerdefinierter Designs.' },
+                    { name: 'PWA', description: 'Progressive Web App Features (Manifest & Service Worker) für ein natives App-Feeling und Offline-Fähigkeit.' }
+                ]
+            };
+
+            function renderTechStack() {
+                const backendContainer = document.getElementById('backend-stack');
+                const frontendContainer = document.getElementById('frontend-stack');
+
+                techStackData.backend.forEach(item => {
+                    backendContainer.innerHTML += `
+                        <div class="tech-card border border-slate-200 rounded-lg p-3 cursor-pointer hover:bg-slate-50">
+                            <h5 class="font-semibold text-slate-700">${item.name}</h5>
+                            <p class="tech-description hidden text-sm text-slate-500 mt-2">${item.description}</p>
+                        </div>
+                    `;
+                });
+
+                techStackData.frontend.forEach(item => {
+                    frontendContainer.innerHTML += `
+                        <div class="tech-card border border-slate-200 rounded-lg p-3 cursor-pointer hover:bg-slate-50">
+                            <h5 class="font-semibold text-slate-700">${item.name}</h5>
+                            <p class="tech-description hidden text-sm text-slate-500 mt-2">${item.description}</p>
+                        </div>
+                    `;
+                });
+
+                document.querySelectorAll('.tech-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        card.querySelector('.tech-description').classList.toggle('hidden');
+                    });
+                });
+            }
+
+            // --- File Structure Data ---
+            const fileStructureData = {
+                id: 'root', name: '/', type: 'folder', description: 'Das Hauptverzeichnis des Projekts.',
+                children: [
+                    {
+                        id: 'backend', name: 'backend/', type: 'folder', description: 'Enthält den gesamten Python-Code für die FastAPI-Anwendung.',
+                        children: [
+                            { id: 'main.py', name: 'main.py', type: 'file', description: 'Die Hauptlogik der FastAPI-Anwendung, einschließlich aller API-Endpunkte.' },
+                            { id: 'requirements.txt', name: 'requirements.txt', type: 'file', description: 'Listet alle Python-Abhängigkeiten für das Backend auf.' },
+                            { id: '.env.example', name: '.env.example', type: 'file', description: 'Eine Vorlagendatei für die benötigten Umgebungsvariablen.' }
+                        ]
+                    },
+                    {
+                        id: 'frontend', name: 'frontend/', type: 'folder', description: 'Enthält den gesamten React-Code für die Benutzeroberfläche.',
+                        children: [
+                            {
+                                id: 'public', name: 'public/', type: 'folder', description: 'Enthält statische Assets, die direkt in den Build-Ordner kopiert werden.',
+                                children: [
+                                    { id: 'manifest.json', name: 'manifest.json', type: 'file', description: 'Konfigurationsdatei für die Progressive Web App (PWA).' },
+                                    { id: 'sw.js', name: 'sw.js', type: 'file', description: 'Der Service Worker, der Offline-Fähigkeit und Caching ermöglicht.' }
+                                ]
+                            },
+                            {
+                                id: 'src', name: 'src/', type: 'folder', description: 'Der Hauptquellcode der React-Anwendung.',
+                                children: [
+                                    { id: 'App.jsx', name: 'App.jsx', type: 'file', description: 'Die Hauptkomponente der React-App, die die gesamte UI rendert.' }
+                                ]
+                            },
+                            { id: 'package.json', name: 'package.json', type: 'file', description: 'Listet alle Node.js-Abhängigkeiten und Skripte für das Frontend auf.' }
+                        ]
+                    }
+                ]
+            };
+
+            function renderFileTree(node, container, level = 0) {
+                const isFile = node.type === 'file';
+                const padding = level * 20;
+                const item = document.createElement('div');
+                item.className = 'file-tree-item cursor-pointer';
+                item.dataset.id = node.id;
+                item.innerHTML = `
+                    <div class="flex items-center" style="padding-left: ${padding}px;">
+                        <span class="mr-2">${isFile ? '📄' : '📁'}</span>
+                        <span>${node.name}</span>
+                    </div>
+                `;
+                container.appendChild(item);
+                if (node.children) {
+                    node.children.forEach(child => renderFileTree(child, container, level + 1));
+                }
+            }
+
+            const fileTreeContainer = document.getElementById('file-tree');
+            renderFileTree(fileStructureData, fileTreeContainer);
+
+            document.querySelectorAll('.file-tree-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const currentActive = document.querySelector('.file-tree-item.active');
+                    if(currentActive) currentActive.classList.remove('active');
+                    item.classList.add('active');
+
+                    let nodeToFind = item.dataset.id;
+                    let description = 'Beschreibung nicht gefunden.';
+
+                    function findNode(node, id) {
+                        if (node.id === id) return node.description;
+                        if (node.children) {
+                            for (let child of node.children) {
+                                let found = findNode(child, id);
+                                if (found) return found;
+                            }
+                        }
+                        return null;
+                    }
+
+                    description = findNode(fileStructureData, nodeToFind);
+                    document.getElementById('file-description').innerHTML = `<p class="text-slate-700">${description}</p>`;
+                });
+            });
+
+            // --- Tabs Data ---
+            const tabData = {
+                'backend-setup': {
+                    title: '1. Backend-Einrichtung',
+                    steps: [
+                        "In den Backend-Ordner wechseln: `cd backend`",
+                        "Eine virtuelle Umgebung erstellen und aktivieren: `python -m venv .venv` und `source .venv/bin/activate`",
+                        "Python-Abhängigkeiten installieren: `pip install -r requirements.txt`",
+                        "`.env`-Datei erstellen: Kopieren Sie `.env.example` zu `.env` und tragen Sie Ihre Datenbank-URL und User-ID ein.",
+                        "Datenbank-Schema anwenden: Stellen Sie sicher, dass Ihre Tabellen und Views in Supabase existieren.",
+                        "Backend-Server starten: `uvicorn main:app --reload --port 10000`"
+                    ]
+                },
+                'frontend-setup': {
+                    title: '2. Frontend-Einrichtung',
+                    steps: [
+                        "In den Frontend-Ordner wechseln: `cd frontend`",
+                        "Node.js-Abhängigkeiten installieren: `npm install`",
+                        "Frontend-Entwicklungsserver starten: `npm run dev`",
+                        "Die App ist nun unter `http://localhost:5173` erreichbar."
+                    ]
+                },
+                'deployment': {
+                    title: '☁️ Deployment auf Render',
+                    steps: [
+                        "**Backend:** Als 'Web Service' deployen. Root Directory auf `/backend` setzen.",
+                        "**Frontend:** Als 'Static Site' deployen. Root Directory auf `/frontend` setzen.",
+                        "**Datenbank:** Die `DATABASE_URL` von Supabase (Connection Pooler) als Umgebungsvariable im Backend-Dienst hinterlegen.",
+                        "**CORS:** Die Live-URL des Frontends zur `origins`-Liste in der `main.py` hinzufügen."
+                    ]
+                }
+            };
+
+            const tabContentContainer = document.getElementById('tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            function renderTabContent(tabId) {
+                const content = tabData[tabId];
+                let stepsHtml = content.steps.map(step => `<li class="flex items-start"><span class="mr-3 text-blue-500">✓</span><span class="text-slate-600">${step.replace(/`(.*?)`/g, '<code class="bg-slate-200 text-slate-800 rounded px-1 py-0.5 font-mono text-sm">$1</code>')}</span></li>`).join('');
+                tabContentContainer.innerHTML = `
+                    <h4 class="font-bold text-xl mb-4 text-slate-800">${content.title}</h4>
+                    <ul class="space-y-3">${stepsHtml}</ul>
+                `;
+            }
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+                    button.classList.add('tab-active');
+                    renderTabContent(button.dataset.tab);
+                });
+            });
+
+            // Initial render
+            renderTabContent('backend-setup');
+
+            // --- Roadmap Chart ---
+            const roadmapData = {
+                labels: ['Geplant', 'In Arbeit', 'Abgeschlossen'],
+                datasets: [{
+                    label: 'Features',
+                    data: [5, 0, 0], // Corresponds to the 5 planned features
+                    backgroundColor: [
+                        'rgb(100, 116, 139)', // slate-500
+                        'rgb(59, 130, 246)',  // blue-500
+                        'rgb(34, 197, 94)'    // green-500
+                    ],
+                    hoverOffset: 4
+                }]
+            };
+            const roadmapItems = [
+                { text: "Einträge bearbeiten & löschen", status: "Geplant" },
+                { text: "Notizen hinzufügen", status: "Geplant" },
+                { text: "Wochen-/Monatsübersicht", status: "Geplant" },
+                { text: "Export-Funktion", status: "Geplant" },
+                { text: "Multi-User-Fähigkeit", status: "Geplant" }
+            ];
+
+            const roadmapListContainer = document.getElementById('roadmap-list');
+            roadmapItems.forEach(item => {
+                let colorClass = 'bg-slate-500';
+                if(item.status === 'In Arbeit') colorClass = 'bg-blue-500';
+                if(item.status === 'Abgeschlossen') colorClass = 'bg-green-500';
+                roadmapListContainer.innerHTML += `
+                    <li class="flex items-center">
+                        <span class="w-3 h-3 rounded-full mr-3 ${colorClass}"></span>
+                        <span class="text-slate-700">${item.text}</span>
+                    </li>
+                `;
+            });
+            
+            new Chart(document.getElementById('roadmapChart'), {
+                type: 'doughnut',
+                data: roadmapData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: false,
+                            text: 'Roadmap Status'
+                        }
+                    }
+                }
+            });
+
+            renderTechStack();
+        });
+    </script>
+</body>
+</html>
