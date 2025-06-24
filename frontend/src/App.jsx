@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 
-const API_BASE_URL = "http://localhost:10000";
+const API_BASE_URL = "https://timetracker-backend-f7hj.onrender.com";
 
 // Hilfsfunktion zur Formatierung
 const formatDateTime = (dateTimeString) => {
