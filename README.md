@@ -46,6 +46,7 @@ Das Repository ist als Monorepo aufgebaut, um Backend und Frontend zentral zu ve
 │   ├── .venv/
 │   ├── main.py         # Hauptlogik der FastAPI-Anwendung
 │   ├── requirements.txt  # Python-Abhängigkeiten
+│   ├── schema.sql      # SQL-Skript für das Datenbank-Setup
 │   └── .env.example    # Beispiel für Umgebungsvariablen
 │
 └── frontend/
@@ -62,7 +63,17 @@ Das Repository ist als Monorepo aufgebaut, um Backend und Frontend zentral zu ve
 ## 🚀 Lokale Einrichtung & Installation
 Um das Projekt lokal auszuführen, benötigen Sie Git, Node.js (mit npm) und Python.
 
-### 1. Backend
+### 1. Datenbank einrichten (PostgreSQL)
+Bevor Sie das Backend starten, muss Ihre Datenbank (z.B. auf Supabase oder lokal) bereit sein.
+
+1. Verbinden Sie sich mit Ihrer PostgreSQL-Datenbank über einen Client Ihrer Wahl (z.B. DBeaver, DataGrip, psql oder den Supabase SQL Editor).
+
+2. Öffnen Sie die Datei `backend/schema.sql` in Ihrem Projekt.
+
+3. Führen Sie das SQL-Skript aus. Kopieren Sie den gesamten Inhalt der Datei und führen Sie ihn in Ihrem Datenbank-Client aus.
+
+Dadurch werden alle notwendigen Tabellen (`users`, `time_entries`) erstellt und Ihr persönlicher Test-Benutzer wird hinzugefügt, sodass die Anwendung startklar ist.
+### 2. Backend
 ```sh # 1. In den Backend-Ordner wechseln
 cd backend
 
@@ -87,7 +98,7 @@ uvicorn main:app --reload --port 10000
 Das Backend ist nun unter `http://localhost:10000` erreichbar.
 
 
-### 2. Frontend
+### 3. Frontend
 ```sh
 # 1. In den Frontend-Ordner wechseln
 cd frontend
