@@ -78,7 +78,7 @@ origins = [
     "http://localhost:5173",  # For local development
     "http://127.0.0.1:5173",
     "https://timetracker.einfachnurphu.io", 
-    "https://timetracker-backend-f7hj.onrender.com/"# Your production URL
+    "https://timetracker-frontend-w5ri.onrender.com"# Your production URL
     # Add your Render URL if it's different
 ]
 app.add_middleware(
