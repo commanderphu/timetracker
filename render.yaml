@@ -1,0 +1,41 @@
+# render.yaml
+# Konfiguration für das Deployment eines Monorepos (Backend + Frontend) auf Render.
+
+# Definiert eine Umgebungsgruppe, um Ihre Geheimnisse (Secrets) sicher zu speichern.
+# Sie müssen diese Gruppe im Render-Dashboard unter "Environment" -> "Environment Groups"
+# erstellen und dort Ihre DATABASE_URL und FIXED_USER_ID eintragen.
+envVarGroups:
+  - name: timetracker-secrets
+    # envVars werden direkt im Dashboard hinzugefügt, nicht hier committet.
+
+services:
+  # 1. Backend Service (FastAPI Web-Anwendung)
+  - type: web
+    name: timetracker-backend
+    env: python
+    # Wichtig für Monorepo: Gibt das Verzeichnis des Backend-Codes an
+    rootDir: backend
+    plan: free # oder Ihr bevorzugter Plan
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    envVars:
+      # Verweist auf die oben definierte Gruppe, um Secrets zu laden
+      - fromGroup: timetracker-secrets
+      # Legt eine spezifische Python-Version fest, um Kompatibilität zu gewährleisten
+      - key: PYTHON_VERSION
+        value: 3.11.9
+
+  # 2. Frontend Service (React Static Site)
+  - type: static
+    name: timetracker-frontend
+    # Wichtig für Monorepo: Gibt das Verzeichnis des Frontend-Codes an
+    rootDir: frontend
+    plan: free # oder Ihr bevorzugter Plan
+    buildCommand: npm install && npm run build
+    publishDir: dist # Der Ordner, den Vite nach dem Build erstellt
+    # Wichtig für Single-Page-Applications (SPA):
+    # Leitet alle Anfragen an die index.html um, damit React-Routing funktioniert.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
